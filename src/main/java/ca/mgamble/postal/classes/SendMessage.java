@@ -219,42 +219,42 @@ public class SendMessage {
     /**
      * @return the reply_to
      */
-    public String getReply_to() {
+    public String getReplyTo() {
         return reply_to;
     }
 
     /**
      * @param reply_to the reply_to to set
      */
-    public void setReply_to(String reply_to) {
+    public void setReplyTo(String reply_to) {
         this.reply_to = reply_to;
     }
 
     /**
      * @return the plain_body
      */
-    public String getPlain_body() {
+    public String getPlainBody() {
         return plain_body;
     }
 
     /**
      * @param plain_body the plain_body to set
      */
-    public void setPlain_body(String plain_body) {
+    public void setPlainBody(String plain_body) {
         this.plain_body = plain_body;
     }
 
     /**
      * @return the html_body
      */
-    public String getHtml_body() {
+    public String getHtmlBody() {
         return html_body;
     }
 
     /**
      * @param html_body the html_body to set
      */
-    public void setHtml_body(String html_body) {
+    public void setHtmlBody(String html_body) {
         this.html_body = html_body;
     }
 

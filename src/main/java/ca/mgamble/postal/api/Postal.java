@@ -29,6 +29,7 @@ THE SOFTWARE.
 package ca.mgamble.postal.api;
 
 
+import ca.mgamble.postal.classes.APIResponse;
 import ca.mgamble.postal.classes.SendMessage;
 import ca.mgamble.postal.classes.SendRawMessage;
 import com.google.gson.Gson;
@@ -88,18 +89,18 @@ public class Postal implements Closeable {
         return version.getBuildNumber();
     }
     
-    public String sendRawmessage(SendRawMessage message) throws Exception {
+    public APIResponse sendRawmessage(SendRawMessage message) throws Exception {
          Future<Response> f = client.executeRequest(buildRequest("POST", "send/raw", gson.toJson(message)));
         Response r = f.get();
         if (r.getStatusCode() != 200) {
             
             throw new Exception("Could not send raw message");
         } else {
-            return r.getResponseBody();
+            return gson.fromJson(r.getResponseBody(), APIResponse.class);
             
         }
     }
-    public String sendMessage(SendMessage message) throws Exception {
+    public APIResponse sendMessage(SendMessage message) throws Exception {
         
         // Simple pre-flight checks 
         if (message.getTo().size() > 50) { 
@@ -118,7 +119,7 @@ public class Postal implements Closeable {
             
             throw new Exception("Could not send message");
         } else {
-            return r.getResponseBody();
+            return gson.fromJson(r.getResponseBody(), APIResponse.class);
             
         }
     }
