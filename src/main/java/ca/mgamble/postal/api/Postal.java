@@ -56,7 +56,7 @@ public class Postal implements Closeable {
     private boolean closed = false;
     Gson gson = new Gson();
     
-    public Postal(String url, String apiKey) throws Exception {
+    public Postal(String url, String apiKey) {
         this.logger = Logger.getLogger(Postal.class);
         this.url = url;
         this.client = new DefaultAsyncHttpClient();
@@ -83,6 +83,18 @@ public class Postal implements Closeable {
     }
     
     public String sendMessage(SendMessage message) throws Exception {
+        
+        // Simple pre-flight checks 
+        if (message.getTo().size() > 50) { 
+            throw new Exception("Too many recipients");
+        }
+        if (message.getCc().size() > 50) { 
+            throw new Exception("Too many CC contacts");
+        }
+        if (message.getBcc().size() > 50) { 
+            throw new Exception("Too many BCC contacts");
+        }
+        
         Future<Response> f = client.executeRequest(buildRequest("POST", "send/message", gson.toJson(message)));
         Response r = f.get();
         if (r.getStatusCode() != 200) {

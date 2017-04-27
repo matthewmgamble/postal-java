@@ -1,6 +1,3 @@
-
-package ca.mgamble.postal.classes;
-
 /**
  *
  * @author mgamble
@@ -29,56 +26,62 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
  */
 
-public class Attachment {
-    private String name;
-    private String content_type;
-    private String data;
+package ca.mgamble.postal.classes;
 
+import com.google.gson.annotations.SerializedName;
+import java.io.Serializable;
+
+public class APIResponse  { 
     
-    public Attachment(String name, String content_type, String data) {
-        this.name = name;
-        this.content_type = content_type;
-        this.data = data;
-    }
+    @SerializedName("status")
+    private OperationStatus status;
+    
+    @SerializedName("time")
+    private String time;
+    
+    @SerializedName("data")
+    private DataObject data;
+
     /**
-     * @return the name
+     * @return the status
      */
-    public String getName() {
-        return name;
+    public OperationStatus getStatus() {
+        return status;
     }
 
     /**
-     * @param name the name to set
+     * @param status the status to set
      */
-    public void setName(String name) {
-        this.name = name;
+    public void setStatus(OperationStatus status) {
+        this.status = status;
     }
 
     /**
-     * @return the content_type
+     * @return the time
      */
-    public String getContent_type() {
-        return content_type;
+    public String getTime() {
+        return time;
     }
 
     /**
-     * @param content_type the content_type to set
+     * @param time the time to set
      */
-    public void setContent_type(String content_type) {
-        this.content_type = content_type;
+    public void setTime(String time) {
+        this.time = time;
     }
 
     /**
      * @return the data
      */
-    public String getData() {
+    public DataObject getData() {
         return data;
     }
 
     /**
      * @param data the data to set
      */
-    public void setData(String data) {
+    public void setData(DataObject data) {
         this.data = data;
     }
 }
+ 

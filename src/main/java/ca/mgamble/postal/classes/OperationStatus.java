@@ -1,6 +1,8 @@
 
 package ca.mgamble.postal.classes;
 
+import com.google.gson.annotations.SerializedName;
+import java.io.Serializable;
 /**
  *
  * @author mgamble
@@ -29,56 +31,30 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
  */
 
-public class Attachment {
-    private String name;
-    private String content_type;
-    private String data;
+public enum OperationStatus  implements Serializable {
+    @SerializedName("success")
+    SUCCESS("success"),
+    @SerializedName("error")
+    ERROR("error");
 
-    
-    public Attachment(String name, String content_type, String data) {
-        this.name = name;
-        this.content_type = content_type;
-        this.data = data;
-    }
-    /**
-     * @return the name
-     */
-    public String getName() {
-        return name;
+    private final String text;
+
+    OperationStatus(String text) {
+        this.text = text;
     }
 
-    /**
-     * @param name the name to set
-     */
-    public void setName(String name) {
-        this.name = name;
+    public String getText() {
+        return this.text;
     }
 
-    /**
-     * @return the content_type
-     */
-    public String getContent_type() {
-        return content_type;
-    }
-
-    /**
-     * @param content_type the content_type to set
-     */
-    public void setContent_type(String content_type) {
-        this.content_type = content_type;
-    }
-
-    /**
-     * @return the data
-     */
-    public String getData() {
-        return data;
-    }
-
-    /**
-     * @param data the data to set
-     */
-    public void setData(String data) {
-        this.data = data;
+    public static OperationStatus fromString(String text) {
+        if (text != null) {
+            for (OperationStatus b : OperationStatus.values()) {
+                if (text.equalsIgnoreCase(b.text)) {
+                    return b;
+                }
+            }
+        }
+        return null;
     }
 }
