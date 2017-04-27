@@ -23,50 +23,26 @@
  */
 package ca.mgamble.postal.classes;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 /**
  *
  * @author mgamble
  */
-public class DataObject {
-    private ErrorCode code;
-    private String message;
+public class SendResult {
+    private String id;
     private String token;
-    private String message_id;
-    private HashMap<String, SendResult> messages;
-    
-    
-    public DataObject() {
-        this.messages = new HashMap<>();
-    }
+
     /**
-     * @return the code
+     * @return the id
      */
-    public ErrorCode getCode() {
-        return code;
+    public String getId() {
+        return id;
     }
 
     /**
-     * @param code the code to set
+     * @param id the id to set
      */
-    public void setCode(ErrorCode code) {
-        this.code = code;
-    }
-
-    /**
-     * @return the message
-     */
-    public String getMessage() {
-        return message;
-    }
-
-    /**
-     * @param message the message to set
-     */
-    public void setMessage(String message) {
-        this.message = message;
+    public void setId(String id) {
+        this.id = id;
     }
 
     /**
@@ -81,33 +57,5 @@ public class DataObject {
      */
     public void setToken(String token) {
         this.token = token;
-    }
-
-    /**
-     * @return the message_id
-     */
-    public String getMessage_id() {
-        return message_id;
-    }
-
-    /**
-     * @param message_id the message_id to set
-     */
-    public void setMessage_id(String message_id) {
-        this.message_id = message_id;
-    }
-
-    /**
-     * @return the messages
-     */
-    public HashMap<String, SendResult> getMessages() {
-        return messages;
-    }
-
-    /**
-     * @param messages the messages to set
-     */
-    public void setMessages(HashMap<String, SendResult> messages) {
-        this.messages = messages;
     }
 }

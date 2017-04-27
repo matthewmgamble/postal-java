@@ -30,7 +30,9 @@ package ca.mgamble.postal.api;
 
 
 import ca.mgamble.postal.classes.SendMessage;
+import ca.mgamble.postal.classes.SendRawMessage;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -45,16 +47,16 @@ import java.util.logging.Level;
  */
 public class Postal implements Closeable {
     
-    private static final String JSON = "application/json; charset=UTF-8";
+    private static final String JSON = "application/json";
     //   private final boolean closeClient;
     private final AsyncHttpClient client;
     private final String url;
     private final String apiKey;
-
+    private final Version version = new Version();
     //  private final ObjectMapper mapper;
     private final Logger logger;
     private boolean closed = false;
-    Gson gson = new Gson();
+    Gson gson = new GsonBuilder().serializeNulls().create();
     
     public Postal(String url, String apiKey) {
         this.logger = Logger.getLogger(Postal.class);
@@ -82,6 +84,21 @@ public class Postal implements Closeable {
         closed = true;
     }
     
+    public String getClientVersion() {
+        return version.getBuildNumber();
+    }
+    
+    public String sendRawmessage(SendRawMessage message) throws Exception {
+         Future<Response> f = client.executeRequest(buildRequest("POST", "send/raw", gson.toJson(message)));
+        Response r = f.get();
+        if (r.getStatusCode() != 200) {
+            
+            throw new Exception("Could not send raw message");
+        } else {
+            return r.getResponseBody();
+            
+        }
+    }
     public String sendMessage(SendMessage message) throws Exception {
         
         // Simple pre-flight checks 
@@ -99,7 +116,7 @@ public class Postal implements Closeable {
         Response r = f.get();
         if (r.getStatusCode() != 200) {
             
-            throw new Exception("Could not get device ID");
+            throw new Exception("Could not send message");
         } else {
             return r.getResponseBody();
             

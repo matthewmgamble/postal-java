@@ -54,10 +54,13 @@ public class SendMessage {
     private String plain_body;
     private String html_body;
     private boolean bounce;
-    /*
-     $this->attributes['headers'] = [];
-        $this->attributes['attachments'] = [];
-     */
+    
+    public SendMessage() {
+        this.to = new ArrayList<>();
+        this.cc = new ArrayList<>();
+        this.bcc = new ArrayList<>();
+    }
+    
     /**
      * @return the to
      */
