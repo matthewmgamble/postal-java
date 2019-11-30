@@ -14,5 +14,5 @@ Usage of the API is simple:
               message.setPlainBody("This is the plain body.  Very plain.");
               message.addAttachment(new Attachment("test-csv.csv", "application/octet-stream", new String(Base64.getEncoder().encode(tblBordByte))));
         
-            postal.PostalMessage(message);
+            postal.sendMessage(message);
         
