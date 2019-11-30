@@ -1,3 +1,9 @@
+
+package ca.mgamble.postal.api.message;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  *
  * @author mgamble
@@ -25,63 +31,16 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
  */
+@Data
+@NoArgsConstructor
+public class Attachment {
+    private String name;
+    private String content_type;
+    private String data;
 
-package ca.mgamble.postal.classes;
-
-import com.google.gson.annotations.SerializedName;
-import java.io.Serializable;
-
-public class APIResponse  { 
-    
-    @SerializedName("status")
-    private OperationStatus status;
-    
-    @SerializedName("time")
-    private String time;
-    
-    @SerializedName("data")
-    private DataObject data;
-
-    /**
-     * @return the status
-     */
-    public OperationStatus getStatus() {
-        return status;
-    }
-
-    /**
-     * @param status the status to set
-     */
-    public void setStatus(OperationStatus status) {
-        this.status = status;
-    }
-
-    /**
-     * @return the time
-     */
-    public String getTime() {
-        return time;
-    }
-
-    /**
-     * @param time the time to set
-     */
-    public void setTime(String time) {
-        this.time = time;
-    }
-
-    /**
-     * @return the data
-     */
-    public DataObject getData() {
-        return data;
-    }
-
-    /**
-     * @param data the data to set
-     */
-    public void setData(DataObject data) {
+    public Attachment(String name, String content_type, String data) {
+        this.name = name;
+        this.content_type = content_type;
         this.data = data;
     }
 }
- 

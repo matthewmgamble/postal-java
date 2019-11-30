@@ -21,41 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package ca.mgamble.postal.classes;
+package ca.mgamble.postal.api.response;
+
+import lombok.Data;
+
+import java.util.Map;
 
 /**
  *
  * @author mgamble
  */
-public class SendResult {
-    private String id;
+@Data
+public class ResponseData {
+    private ErrorCode code;
+    private String message;
     private String token;
+    private String message_id;
+    private Map<String, SendResult> messages;
 
-    /**
-     * @return the id
-     */
-    public String getId() {
-        return id;
-    }
-
-    /**
-     * @param id the id to set
-     */
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    /**
-     * @return the token
-     */
-    public String getToken() {
-        return token;
-    }
-
-    /**
-     * @param token the token to set
-     */
-    public void setToken(String token) {
-        this.token = token;
+    public String getResponseSumary() {
+        return code != null ? code.getText() + " " : "" + message + " for message_id = " + message_id;
     }
 }

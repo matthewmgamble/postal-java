@@ -1,8 +1,7 @@
+package ca.mgamble.postal.api.response;
 
-package ca.mgamble.postal.classes;
+import lombok.Data;
 
-import com.google.gson.annotations.SerializedName;
-import java.io.Serializable;
 /**
  *
  * @author mgamble
@@ -31,30 +30,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
  */
 
-public enum OperationStatus  implements Serializable {
-    @SerializedName("success")
-    SUCCESS("success"),
-    @SerializedName("error")
-    ERROR("error");
-
-    private final String text;
-
-    OperationStatus(String text) {
-        this.text = text;
-    }
-
-    public String getText() {
-        return this.text;
-    }
-
-    public static OperationStatus fromString(String text) {
-        if (text != null) {
-            for (OperationStatus b : OperationStatus.values()) {
-                if (text.equalsIgnoreCase(b.text)) {
-                    return b;
-                }
-            }
-        }
-        return null;
-    }
+@Data
+public class SendRawMessage {
+    private String mail_from;
+    private String rcpt_to;
+    private String data;
+    private boolean bounce;
 }

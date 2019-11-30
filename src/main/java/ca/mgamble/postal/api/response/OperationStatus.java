@@ -1,6 +1,8 @@
 
-package ca.mgamble.postal.classes;
+package ca.mgamble.postal.api.response;
 
+import com.google.gson.annotations.SerializedName;
+import java.io.Serializable;
 /**
  *
  * @author mgamble
@@ -29,40 +31,30 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
  */
 
-public class Header {
-    private String key;
-    private String value;
+public enum OperationStatus  implements Serializable {
+    @SerializedName("success")
+    SUCCESS("success"),
+    @SerializedName("error")
+    ERROR("error");
 
-    
-    public Header(String key, String value) {
-        this.key = key;
-        this.value = value;
-    }
-    /**
-     * @return the key
-     */
-    public String getKey() {
-        return key;
+    private final String text;
+
+    OperationStatus(String text) {
+        this.text = text;
     }
 
-    /**
-     * @param key the key to set
-     */
-    public void setKey(String key) {
-        this.key = key;
+    public String getText() {
+        return this.text;
     }
 
-    /**
-     * @return the value
-     */
-    public String getValue() {
-        return value;
-    }
-
-    /**
-     * @param value the value to set
-     */
-    public void setValue(String value) {
-        this.value = value;
+    public static OperationStatus fromString(String text) {
+        if (text != null) {
+            for (OperationStatus b : OperationStatus.values()) {
+                if (text.equalsIgnoreCase(b.text)) {
+                    return b;
+                }
+            }
+        }
+        return null;
     }
 }
