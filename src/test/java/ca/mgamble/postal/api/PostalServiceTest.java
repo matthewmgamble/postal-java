@@ -7,14 +7,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class PostalServiceTest {
     private PostalService postalService;
 
     @BeforeEach
     void setUp() {
-        postalService = new PostalService("url", "apiKey");
+        postalService = new PostalService("https://postal.domain.com", "apiKey");
     }
 
     @Disabled("Only used to test sending email via API Postal, not to be run automatically")
@@ -27,5 +29,15 @@ class PostalServiceTest {
         // THEN
         assertNotNull(postalApiResponse);
         assertEquals(OperationStatus.SUCCESS, postalApiResponse.getStatus());
+    }
+
+    @Test
+    public void onSendMail_withBadPostalServiceUrl_shouldThrowException() throws Exception {
+        // GIVEN
+        PostalMessage message = MockPostalMessage.mock("test@email.com");
+        // WHEN
+        Exception exception = assertThrows(Exception.class, () -> postalService.sendMessage(message));
+        // THEN
+        assertEquals("Could not send message, server responded with 404", exception.getMessage());
     }
 }

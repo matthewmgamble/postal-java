@@ -34,13 +34,17 @@ import ca.mgamble.postal.api.response.PostalApiResponse;
 import ca.mgamble.postal.api.response.SendRawMessage;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import lombok.Setter;
+import org.asynchttpclient.AsyncHttpClient;
+import org.asynchttpclient.DefaultAsyncHttpClient;
+import org.asynchttpclient.Request;
+import org.asynchttpclient.RequestBuilder;
+import org.asynchttpclient.Response;
 
 import java.io.Closeable;
 import java.io.IOException;
-
-import lombok.Setter;
-import org.apache.log4j.Logger;
-import org.asynchttpclient.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 
@@ -114,13 +118,14 @@ public class PostalService implements Closeable {
         Future<Response> future = client.executeRequest(buildRequest("POST", "send/message", gson.toJson(message)));
         Response response = future.get();
         if (response.getStatusCode() != 200) {
-            throw new Exception("Could not send message");
+            throw new Exception("Could not send message, server responded with " + response.getStatusCode());
         } else {
             return gson.fromJson(response.getResponseBody(), PostalApiResponse.class);
         }
     }
 
     private Request buildRequest(String type, String subUrl) {
+        validatePostalParameters();
         RequestBuilder builder = new RequestBuilder(type);
         return builder.setUrl(this.url + "/api/v1/" + subUrl)
                 .addHeader("Accept", JSON)
@@ -129,7 +134,31 @@ public class PostalService implements Closeable {
                 .build();
     }
 
+    private void validatePostalParameters() {
+        if (this.url == null) {
+            throw new RuntimeException("Postal URL can't be null");
+        }
+        if (!isValidURL(this.url)) {
+            throw new RuntimeException("URL format is incorrect.");
+        }
+        if (this.apiKey == null) {
+            throw new RuntimeException("Postal API Key can't be null");
+        }
+    }
+
+    private boolean isValidURL(String urlStr) {
+        try {
+            URL url = new URL(urlStr);
+            return true;
+        }
+        catch (MalformedURLException e) {
+            return false;
+        }
+    }
+
+
     private Request buildRequest(String type, String subUrl, String requestBody) {
+        validatePostalParameters();
         RequestBuilder builder = new RequestBuilder(type);
         return builder.setUrl(this.url + "/api/v1/" + subUrl)
                 .addHeader("Accept", JSON)

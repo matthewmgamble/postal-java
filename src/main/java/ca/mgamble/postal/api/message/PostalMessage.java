@@ -53,6 +53,21 @@ public class PostalMessage {
     private String html_body;
     private boolean bounce;
 
+    public PostalMessage(List<String> to, List<String> cc, List<String> bcc, List<Attachment> attachments, List<Header> headers, String from, String subject, String tag, String reply_to, String plain_body, String html_body, boolean bounce) {
+        this.to = to;
+        this.cc = cc;
+        this.bcc = bcc;
+        this.attachments = attachments;
+        this.headers = headers;
+        this.from = from;
+        this.subject = subject;
+        this.tag = tag;
+        this.reply_to = reply_to;
+        this.plain_body = plain_body;
+        this.html_body = html_body;
+        this.bounce = bounce;
+    }
+
     public PostalMessage() {
         this.to = new ArrayList<>();
         this.cc = new ArrayList<>();
