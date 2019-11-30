@@ -50,8 +50,6 @@ import java.util.logging.Level;
  */
 public class PostalService implements Closeable {
 
-    private static final Logger logger = Logger.getLogger(PostalService.class);
-
     private static final String JSON = "application/json";
     private final AsyncHttpClient client;
 
