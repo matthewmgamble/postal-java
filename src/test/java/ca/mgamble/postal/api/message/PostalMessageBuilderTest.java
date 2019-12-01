@@ -2,11 +2,11 @@ package ca.mgamble.postal.api.message;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 class PostalMessageBuilderTest {
 
@@ -26,7 +26,7 @@ class PostalMessageBuilderTest {
 
         assertEquals("no-reply@my-domain.com", message.getFrom());
         assertEquals(Arrays.asList("email@gmail.com", "email2@gmail.com"), message.getTo());
-        assertNull(message.getBcc());
+        assertEquals(new ArrayList<>(), message.getBcc());
         assertEquals(Collections.singletonList("cc@gmail.com"), message.getCc());
         assertEquals("Testing with attachments", message.getSubject());
     }
