@@ -31,7 +31,8 @@ package ca.mgamble.postal.api;
 
 import ca.mgamble.postal.api.message.PostalMessage;
 import ca.mgamble.postal.api.response.PostalApiResponse;
-import ca.mgamble.postal.api.response.SendRawMessage;
+import ca.mgamble.postal.api.message.PostalRawMessage;
+import ca.mgamble.postal.api.utils.StringEscapeUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.Setter;
@@ -91,7 +92,7 @@ public class PostalService implements Closeable {
         closed = true;
     }
 
-    public PostalApiResponse sendRawmessage(SendRawMessage message) throws Exception {
+    public PostalApiResponse sendRawmessage(PostalRawMessage message) throws Exception {
         Future<Response> f = client.executeRequest(buildRequest("POST", "send/raw", gson.toJson(message)));
         Response r = f.get();
         if (r.getStatusCode() != 200) {
@@ -104,7 +105,19 @@ public class PostalService implements Closeable {
     }
     public PostalApiResponse sendMessage(PostalMessage message) throws Exception {
 
-        // Simple pre-flight checks
+        validateRecipientsMaxLength(message);
+        encodeAccentedCharactersFromMessage(message);
+
+        Future<Response> future = client.executeRequest(buildRequest("POST", "send/message", gson.toJson(message)));
+        Response response = future.get();
+        if (response.getStatusCode() != 200) {
+            throw new Exception("Could not send message, server responded with " + response.getStatusCode());
+        } else {
+            return gson.fromJson(response.getResponseBody(), PostalApiResponse.class);
+        }
+    }
+
+    private void validateRecipientsMaxLength(PostalMessage message) throws Exception {
         if (message.getTo().size() > 50) {
             throw new Exception("Too many recipients");
         }
@@ -114,13 +127,17 @@ public class PostalService implements Closeable {
         if (message.getBcc().size() > 50) {
             throw new Exception("Too many BCC contacts");
         }
+    }
 
-        Future<Response> future = client.executeRequest(buildRequest("POST", "send/message", gson.toJson(message)));
-        Response response = future.get();
-        if (response.getStatusCode() != 200) {
-            throw new Exception("Could not send message, server responded with " + response.getStatusCode());
-        } else {
-            return gson.fromJson(response.getResponseBody(), PostalApiResponse.class);
+    private void encodeAccentedCharactersFromMessage(PostalMessage message) {
+        if (message.getHtmlBody() != null) {
+            message.setHtmlBody(StringEscapeUtils.encodeHtmlAccentedCharacters(message.getHtmlBody()));
+        }
+        if (message.getPlainBody() != null) {
+            message.setPlainBody(StringEscapeUtils.encodeHtmlAccentedCharacters(message.getPlainBody()));
+        }
+        if (message.getSubject() != null) {
+            message.setSubject(StringEscapeUtils.encodeHtmlAccentedCharacters(message.getSubject()));
         }
     }
 
