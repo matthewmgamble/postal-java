@@ -9,6 +9,7 @@ public class PostalMessageBuilder {
     private List<String> cc = new ArrayList<>();
     private List<String> bcc = new ArrayList<>();
     private List<Attachment> attachments = new ArrayList<>();
+    private List<EmbeddedImage> embeddedImages = new ArrayList<>();
     private List<Header> headers = new ArrayList<>();
     private String from;
     private String subject;
@@ -18,17 +19,17 @@ public class PostalMessageBuilder {
     private String html_body;
     private boolean bounce;
 
-    public PostalMessageBuilder addTo(String to) {
+    public PostalMessageBuilder to(String to) {
         this.to.add(to);
         return this;
     }
 
-    public PostalMessageBuilder addCc(String cc) {
+    public PostalMessageBuilder cc(String cc) {
         this.cc.add(cc);
         return this;
     }
 
-    public PostalMessageBuilder addBcc(String bcc) {
+    public PostalMessageBuilder bcc(String bcc) {
         this.bcc.add(bcc);
         return this;
     }
@@ -38,12 +39,17 @@ public class PostalMessageBuilder {
         return this;
     }
 
+    public PostalMessageBuilder addEmbeddedImage(EmbeddedImage embeddedImage) {
+        this.embeddedImages.add(embeddedImage);
+        return this;
+    }
+
     public PostalMessageBuilder addHeader(Header header) {
         this.headers.add(header);
         return this;
     }
 
-    public PostalMessageBuilder withFrom(String from) {
+    public PostalMessageBuilder from(String from) {
         this.from = from;
         return this;
     }
@@ -79,6 +85,6 @@ public class PostalMessageBuilder {
     }
 
     public PostalMessage build() {
-        return new PostalMessage(to, cc, bcc, attachments, headers, from, subject, tag, reply_to, plain_body, html_body, bounce);
+        return new PostalMessage(to, cc, bcc, attachments, embeddedImages, headers, from, subject, tag, reply_to, plain_body, html_body, bounce);
     }
 }

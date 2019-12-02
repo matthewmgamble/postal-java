@@ -4,6 +4,8 @@ package ca.mgamble.postal.api.message;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Base64;
+
 /**
  *
  * @author mgamble
@@ -42,5 +44,9 @@ public class Attachment {
         this.name = name;
         this.content_type = content_type;
         this.data = data;
+    }
+
+    public Attachment(String name, String content_type, byte[] data) {
+        this(name, content_type, new String(Base64.getEncoder().encode(data)));
     }
 }

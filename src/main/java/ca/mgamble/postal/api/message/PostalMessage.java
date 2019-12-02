@@ -42,6 +42,8 @@ public class PostalMessage {
     private List<String> bcc;
     private List<Attachment> attachments;
 
+    transient private List<EmbeddedImage> embeddedImages;
+
     @SerializedName("Headers")
     private List<Header> headers;
 
@@ -53,11 +55,13 @@ public class PostalMessage {
     private String html_body;
     private boolean bounce;
 
-    public PostalMessage(List<String> to, List<String> cc, List<String> bcc, List<Attachment> attachments, List<Header> headers, String from, String subject, String tag, String reply_to, String plain_body, String html_body, boolean bounce) {
+    public PostalMessage(List<String> to, List<String> cc, List<String> bcc, List<Attachment> attachments, List<EmbeddedImage> embeddedImages,
+                         List<Header> headers, String from, String subject, String tag, String reply_to, String plain_body, String html_body, boolean bounce) {
         this.to = to;
         this.cc = cc;
         this.bcc = bcc;
         this.attachments = attachments;
+        this.embeddedImages = embeddedImages;
         this.headers = headers;
         this.from = from;
         this.subject = subject;
@@ -98,16 +102,23 @@ public class PostalMessage {
     public void addAttachment(String name, String content_type, String data) {
         this.addAttachment(new Attachment(name, content_type, data));
     }
+
     public void addAttachment(Attachment attachment) {
         if (this.attachments == null) {
             this.attachments = new ArrayList<>();
         }
         this.attachments.add(attachment);
+    }
 
+    public void addEmbeddedImage(EmbeddedImage embeddedImage) {
+        if (this.embeddedImages == null) {
+            this.embeddedImages = new ArrayList<>();
+        }
+        this.embeddedImages.add(embeddedImage);
     }
 
     public void addHeader(Header header) {
-        if(this.headers == null) {
+        if (this.headers == null) {
             this.headers = new ArrayList<>();
         }
         this.headers.add(header);

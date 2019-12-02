@@ -1,6 +1,10 @@
-package ca.mgamble.postal.api.response;
+package ca.mgamble.postal.api.message;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -31,9 +35,24 @@ THE SOFTWARE.
  */
 
 @Data
-public class SendRawMessage {
+@NoArgsConstructor
+public class PostalRawMessage {
     private String mail_from;
-    private String rcpt_to;
+    private List<String> rcpt_to;
     private String data;
     private boolean bounce;
+
+    public PostalRawMessage(String from, String data, boolean bounce, List<String> rcpt_to) {
+        this.mail_from = from;
+        this.data = data;
+        this.bounce = bounce;
+        this.rcpt_to = rcpt_to;
+    }
+
+    public void addTo(String rcptTo) {
+        if (this.rcpt_to == null) {
+            this.rcpt_to = new ArrayList<>();
+        }
+        this.rcpt_to.add(rcptTo);
+    }
 }

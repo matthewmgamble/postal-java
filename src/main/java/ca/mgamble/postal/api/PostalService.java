@@ -30,8 +30,10 @@ package ca.mgamble.postal.api;
 
 
 import ca.mgamble.postal.api.message.PostalMessage;
-import ca.mgamble.postal.api.response.PostalApiResponse;
 import ca.mgamble.postal.api.message.PostalRawMessage;
+import ca.mgamble.postal.api.message.PostalRawMessageBuilder;
+import ca.mgamble.postal.api.response.PostalApiResponse;
+import ca.mgamble.postal.api.utils.RawEmailUtils;
 import ca.mgamble.postal.api.utils.StringEscapeUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -42,6 +44,7 @@ import org.asynchttpclient.Request;
 import org.asynchttpclient.RequestBuilder;
 import org.asynchttpclient.Response;
 
+import javax.mail.MessagingException;
 import java.io.Closeable;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -66,9 +69,11 @@ public class PostalService implements Closeable {
 
     private boolean closed = false;
     private Gson gson = new GsonBuilder().serializeNulls().create();
+    private final RawEmailUtils rawEmailUtils;
 
     public PostalService() {
         this.client = new DefaultAsyncHttpClient();
+        rawEmailUtils = new RawEmailUtils();
     }
 
     public PostalService(String url, String apiKey) {
@@ -96,17 +101,20 @@ public class PostalService implements Closeable {
         Future<Response> f = client.executeRequest(buildRequest("POST", "send/raw", gson.toJson(message)));
         Response r = f.get();
         if (r.getStatusCode() != 200) {
-
             throw new Exception("Could not send raw message");
         } else {
             return gson.fromJson(r.getResponseBody(), PostalApiResponse.class);
-
         }
     }
+
     public PostalApiResponse sendMessage(PostalMessage message) throws Exception {
 
         validateRecipientsMaxLength(message);
         encodeAccentedCharactersFromMessage(message);
+
+        if (message.getEmbeddedImages() != null && message.getEmbeddedImages().size() > 0) {
+            return sendRawmessage(computeRawMessage(message));
+        }
 
         Future<Response> future = client.executeRequest(buildRequest("POST", "send/message", gson.toJson(message)));
         Response response = future.get();
@@ -115,6 +123,14 @@ public class PostalService implements Closeable {
         } else {
             return gson.fromJson(response.getResponseBody(), PostalApiResponse.class);
         }
+    }
+
+    private PostalRawMessage computeRawMessage(PostalMessage message) throws IOException, MessagingException {
+        return new PostalRawMessageBuilder()
+                .from(message.getFrom())
+                .tos(message.getTo())
+                .withData(rawEmailUtils.convertPostalMessageToRawMessage(message))
+                .build();
     }
 
     private void validateRecipientsMaxLength(PostalMessage message) throws Exception {
@@ -131,13 +147,13 @@ public class PostalService implements Closeable {
 
     private void encodeAccentedCharactersFromMessage(PostalMessage message) {
         if (message.getHtmlBody() != null) {
-            message.setHtmlBody(StringEscapeUtils.encodeHtmlAccentedCharacters(message.getHtmlBody()));
+            message.setHtmlBody(StringEscapeUtils.encodeHtml(message.getHtmlBody()));
         }
         if (message.getPlainBody() != null) {
-            message.setPlainBody(StringEscapeUtils.encodeHtmlAccentedCharacters(message.getPlainBody()));
+            message.setPlainBody(StringEscapeUtils.encodeHtml(message.getPlainBody()));
         }
         if (message.getSubject() != null) {
-            message.setSubject(StringEscapeUtils.encodeHtmlAccentedCharacters(message.getSubject()));
+            message.setSubject(StringEscapeUtils.encodeHtml(message.getSubject()));
         }
     }
 

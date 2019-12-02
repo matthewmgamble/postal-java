@@ -13,10 +13,10 @@ class PostalMessageBuilderTest {
     @Test
     void builderTest() {
         PostalMessage message = new PostalMessageBuilder()
-                .withFrom("no-reply@my-domain.com")
-                .addTo("email@gmail.com")
-                .addTo("email2@gmail.com")
-                .addCc("cc@gmail.com")
+                .from("no-reply@my-domain.com")
+                .to("email@gmail.com")
+                .to("email2@gmail.com")
+                .cc("cc@gmail.com")
                 .withSubject("Testing with attachments")
                 .withPlainBody("Please view this email in a modern email client!")
                 .withHtmlBody("<html><h1>html body</h1><h2>Please check your attachments!</h2></html>")
