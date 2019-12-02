@@ -41,8 +41,7 @@ public class PostalMessage {
     private List<String> cc;
     private List<String> bcc;
     private List<Attachment> attachments;
-
-    transient private List<EmbeddedImage> embeddedImages;
+    private List<EmbeddedImage> embeddedImages;
 
     @SerializedName("Headers")
     private List<Header> headers;
