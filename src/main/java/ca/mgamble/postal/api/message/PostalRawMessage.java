@@ -1,5 +1,10 @@
+package ca.mgamble.postal.api.message;
 
-package ca.mgamble.postal.classes;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -29,56 +34,25 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
  */
 
-public class Attachment {
-    private String name;
-    private String content_type;
+@Data
+@NoArgsConstructor
+public class PostalRawMessage {
+    private String mail_from;
+    private List<String> rcpt_to;
     private String data;
+    private boolean bounce;
 
-    
-    public Attachment(String name, String content_type, String data) {
-        this.name = name;
-        this.content_type = content_type;
+    public PostalRawMessage(String from, String data, boolean bounce, List<String> rcpt_to) {
+        this.mail_from = from;
         this.data = data;
-    }
-    /**
-     * @return the name
-     */
-    public String getName() {
-        return name;
+        this.bounce = bounce;
+        this.rcpt_to = rcpt_to;
     }
 
-    /**
-     * @param name the name to set
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * @return the content_type
-     */
-    public String getContent_type() {
-        return content_type;
-    }
-
-    /**
-     * @param content_type the content_type to set
-     */
-    public void setContent_type(String content_type) {
-        this.content_type = content_type;
-    }
-
-    /**
-     * @return the data
-     */
-    public String getData() {
-        return data;
-    }
-
-    /**
-     * @param data the data to set
-     */
-    public void setData(String data) {
-        this.data = data;
+    public void addTo(String rcptTo) {
+        if (this.rcpt_to == null) {
+            this.rcpt_to = new ArrayList<>();
+        }
+        this.rcpt_to.add(rcptTo);
     }
 }

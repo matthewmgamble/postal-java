@@ -1,5 +1,10 @@
 
-package ca.mgamble.postal.classes;
+package ca.mgamble.postal.api.message;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.Base64;
 
 /**
  *
@@ -28,41 +33,20 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
  */
+@Data
+@NoArgsConstructor
+public class Attachment {
+    private String name;
+    private String content_type;
+    private String data;
 
-public class Header {
-    private String key;
-    private String value;
-
-    
-    public Header(String key, String value) {
-        this.key = key;
-        this.value = value;
-    }
-    /**
-     * @return the key
-     */
-    public String getKey() {
-        return key;
+    public Attachment(String name, String content_type, String data) {
+        this.name = name;
+        this.content_type = content_type;
+        this.data = data;
     }
 
-    /**
-     * @param key the key to set
-     */
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    /**
-     * @return the value
-     */
-    public String getValue() {
-        return value;
-    }
-
-    /**
-     * @param value the value to set
-     */
-    public void setValue(String value) {
-        this.value = value;
+    public Attachment(String name, String content_type, byte[] data) {
+        this(name, content_type, new String(Base64.getEncoder().encode(data)));
     }
 }

@@ -1,5 +1,5 @@
 
-package ca.mgamble.postal.classes;
+package ca.mgamble.postal.api.response;
 
 import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
@@ -34,37 +34,37 @@ THE SOFTWARE.
 public enum ErrorCode  implements Serializable {
     @SerializedName("InvalidServerAPIKey")
     InvalidServerAPIKey("InvalidServerAPIKey"),
-    
+
     @SerializedName("NoRecipients")
     NoRecipients("NoRecipients"),
-    
+
     @SerializedName("NoContent")
     NoContent("NoContent"),
-    
+
     @SerializedName("NotEnoughCredits")
     NotEnoughCredits("NotEnoughCredits"),
-    
+
     @SerializedName("TooManyToAddresses")
     TooManyToAddresses("TooManyToAddresses"),
-    
+
     @SerializedName("TooManyCCAddresses")
     TooManyCCAddresses("TooManyCCAddresses"),
-    
+
     @SerializedName("TooManyBCCAddresses")
     TooManyBCCAddresses("TooManyBCCAddresses"),
-    
+
     @SerializedName("FromAddressMissing")
     FromAddressMissing("FromAddressMissing"),
-    
+
     @SerializedName("UnauthenticatedFromAddress")
     UnauthenticatedFromAddress("UnauthenticatedFromAddress"),
-    
+
     @SerializedName("AttachmentMissingName")
     AttachmentMissingName("AttachmentMissingName"),
-    
+
     @SerializedName("AttachmentMissingData")
     AttachmentMissingData("AttachmentMissingData"),
-    
+
     @SerializedName("ValidationError")
     ValidationError("ValidationError");
 

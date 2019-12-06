@@ -1,5 +1,8 @@
-package ca.mgamble.postal.classes;
 
+package ca.mgamble.postal.api.response;
+
+import com.google.gson.annotations.SerializedName;
+import java.io.Serializable;
 /**
  *
  * @author mgamble
@@ -28,65 +31,30 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
  */
 
-public class SendRawMessage {
-    private String mail_from;
-    private String rcpt_to;
-    private String data;
-    private boolean bounce;
+public enum OperationStatus  implements Serializable {
+    @SerializedName("success")
+    SUCCESS("success"),
+    @SerializedName("error")
+    ERROR("error");
 
-    /**
-     * @return the mail_from
-     */
-    public String getMail_from() {
-        return mail_from;
+    private final String text;
+
+    OperationStatus(String text) {
+        this.text = text;
     }
 
-    /**
-     * @param mail_from the mail_from to set
-     */
-    public void setMail_from(String mail_from) {
-        this.mail_from = mail_from;
+    public String getText() {
+        return this.text;
     }
 
-    /**
-     * @return the rcpt_to
-     */
-    public String getRcpt_to() {
-        return rcpt_to;
-    }
-
-    /**
-     * @param rcpt_to the rcpt_to to set
-     */
-    public void setRcpt_to(String rcpt_to) {
-        this.rcpt_to = rcpt_to;
-    }
-
-    /**
-     * @return the data
-     */
-    public String getData() {
-        return data;
-    }
-
-    /**
-     * @param data the data to set
-     */
-    public void setData(String data) {
-        this.data = data;
-    }
-
-    /**
-     * @return the bounce
-     */
-    public boolean isBounce() {
-        return bounce;
-    }
-
-    /**
-     * @param bounce the bounce to set
-     */
-    public void setBounce(boolean bounce) {
-        this.bounce = bounce;
+    public static OperationStatus fromString(String text) {
+        if (text != null) {
+            for (OperationStatus b : OperationStatus.values()) {
+                if (text.equalsIgnoreCase(b.text)) {
+                    return b;
+                }
+            }
+        }
+        return null;
     }
 }

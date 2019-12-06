@@ -1,8 +1,8 @@
 
-package ca.mgamble.postal.classes;
+package ca.mgamble.postal.api.message;
 
-import com.google.gson.annotations.SerializedName;
-import java.io.Serializable;
+import lombok.Data;
+
 /**
  *
  * @author mgamble
@@ -31,30 +31,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
  */
 
-public enum OperationStatus  implements Serializable {
-    @SerializedName("success")
-    SUCCESS("success"),
-    @SerializedName("error")
-    ERROR("error");
+@Data
+public class Header {
+    private String key;
+    private String value;
 
-    private final String text;
-
-    OperationStatus(String text) {
-        this.text = text;
-    }
-
-    public String getText() {
-        return this.text;
-    }
-
-    public static OperationStatus fromString(String text) {
-        if (text != null) {
-            for (OperationStatus b : OperationStatus.values()) {
-                if (text.equalsIgnoreCase(b.text)) {
-                    return b;
-                }
-            }
-        }
-        return null;
+    public Header(String key, String value) {
+        this.key = key;
+        this.value = value;
     }
 }
