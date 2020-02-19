@@ -51,6 +51,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
+import java.nio.charset.StandardCharsets;
 
 /**
  *
@@ -152,9 +153,9 @@ public class PostalService implements Closeable {
         if (message.getPlainBody() != null) {
             message.setPlainBody(StringEscapeUtils.encodeHtml(message.getPlainBody()));
         }
-        if (message.getSubject() != null) {
-            message.setSubject(StringEscapeUtils.encodeHtml(message.getSubject()));
-        }
+        //if (message.getSubject() != null) {
+        //    message.setSubject(StringEscapeUtils.encodeHtml(message.getSubject()));
+        //}
     }
 
     private Request buildRequest(String type, String subUrl) {
@@ -197,6 +198,7 @@ public class PostalService implements Closeable {
                 .addHeader("Accept", JSON)
                 .addHeader("Content-Type", JSON)
                 .addHeader("x-server-api-key", this.apiKey)
+                .setCharset(StandardCharsets.UTF_8)
                 .setBody(requestBody)
                 .build();
     }
